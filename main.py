@@ -31,7 +31,114 @@ import time
 #########################################################
 #                   Your Code Goes Below                #
 #########################################################
+'''drawSquare(myturtle=None, width=0, top_left_x=0, top_left_y=0)
+drawLine(myturtle=None, x_start=0, y_start=0, x_end=0, y_end=0)
+drawCircle(myturtle=None, radius=0)
+isInCircle(myturtle=None, circle_center_x=0, circle_center_y=0, radius=0)
+setupDartboard'''
 
+def drawSquare(myturtle=None, width=0, top_left_x=0, top_left_y=0):
+    # using draw line to draw a square or using forward and left
+    top_right_x = top_left_x+width
+    top_right_y = top_left_y
+    bottom_right_x = top_right_x
+    bottom_right_y = top_left_y-width
+    bottom_left_x = top_left_x
+    bottom_left_y = top_left_y-width
+    drawLine(myturtle, top_left_x, top_left_y, top_right_x, top_right_y)
+    drawLine(myturtle, top_right_x, top_right_y, bottom_right_x, bottom_right_y)
+    drawLine(myturtle, bottom_right_x, bottom_right_y, bottom_left_x, bottom_left_y)
+    drawLine(myturtle, bottom_left_x, bottom_left_y, top_left_x, top_left_y)
+
+
+def drawLine(myturtle=None, x_start=0, y_start=0, x_end=0, y_end=0):
+    # set turtle to starting point
+    myturtle.hideturtle()
+    myturtle.goto(x_start, y_start)
+    myturtle.showturtle()
+    myturtle.goto(x_end, y_end)
+
+def drawCircle(myturtle=None, radius=0):
+    myturtle.circle(radius)
+
+
+def setUpDartboard(myscreen=None, myturtle=None):
+    myscreen.setworldcoordinates(-4, -4, 4, 4)
+    # set tutle to top left corner of squre and start
+    # drawing in couter-clock direction
+    myturtle.penup()
+    myturtle.goto(-1, 1)
+    myturtle.pendown()
+    drawSquare(myturtle, 2, -1, 1)
+
+    # set turtle to 0,0 and then draw turtle
+    myturtle.penup()
+    myturtle.goto(0, -1)
+    myturtle.pendown()
+    drawCircle(myturtle, 1)
+
+    # draw x-axis
+    myturtle.penup()
+    myturtle.goto(-1, 0)
+    myturtle.pendown()
+    drawLine(myturtle, -1, 0, 1, 0)
+
+    # draw y-axis
+    myturtle.penup()
+    myturtle.goto(0, -1)
+    myturtle.pendown()
+    drawLine(myturtle, 0, -1, 0, 1)
+    pass
+
+
+def isInCircle(myturtle=None, circle_center_x=0, circle_center_y=0, radius=0):
+    # current turtle position from last drawing position (dart landing/drawing point)
+    # to axis center
+    return myturtle.distance(circle_center_x, circle_center_y) < radius
+
+
+def throwDart(myturtle=None):
+    # using random to get uniformly distributed value for x-cord and y-cord
+    x = random.uniform(-1, 1)
+    y = random.uniform(-1, 1)
+    # set position to where dart will land and draw a blue dot
+    myturtle.penup()
+    myturtle.goto(x, y)
+    myturtle.pendown()
+    myturtle.dot(5, 'blue')
+
+
+def playDarts(myturtle=None):
+    # Asks how many turns you want the two players to play
+    turns = int(input('How many turns do you want to play'))
+    player_a_score = 0
+    player_b_score = 0
+    for i in range(turns):
+        throwDart(myturtle)
+        if isInCircle(myturtle=myturtle, radius=1):
+            print("Player A hit the dartboard!")
+            myturtle.dot(5, 'red')
+            player_a_score += 1
+    for i in range(turns):
+        throwDart(myturtle)
+        if isInCircle(myturtle=myturtle, radius=1):
+            print("Player B hit the dartboard!")
+            myturtle.dot(5, 'red')
+            player_b_score += 1
+    print('Player A scored: ', player_a_score, ' Player B scored: ', player_b_score)
+
+
+def montePi(myturtle=None, num_darts=0):
+    # Asks how many times you want to run the simulation
+    inside_count = 0
+    for i in range(num_darts):
+        throwDart(myturtle)
+        if isInCircle(myturtle=myturtle, radius=1):
+            print("You hit the dartboard!")
+            myturtle.dot(5, 'red')
+            inside_count += 1
+    return 4 * (inside_count/num_darts)
+    
 
 
 #########################################################
